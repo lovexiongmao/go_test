@@ -42,7 +42,7 @@ func startServer(
 		return fmt.Errorf("初始化数据库失败: %v", err)
 	}
 
-	log.Info("数据库表初始化成功")
+	log.Info("数据库表初始化成功！")
 
 	// 创建HTTP服务器
 	srv := &http.Server{
