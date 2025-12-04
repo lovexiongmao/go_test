@@ -73,7 +73,7 @@ func startServer(
 		log.Fatalf("服务器强制关闭: %v", err)
 	}
 
-	log.Info("服务器已退出")
+	log.Info("服务器已退出！")
 
 	return nil
 }
