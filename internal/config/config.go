@@ -30,6 +30,8 @@ type DatabaseConfig struct {
 type LogConfig struct {
 	Level  string // debug, info, warn, error
 	Format string // json, text
+	Output string // stdout, file, both
+	File   string // 日志文件路径
 }
 
 func LoadConfig() (*Config, error) {
@@ -52,6 +54,8 @@ func LoadConfig() (*Config, error) {
 		Log: LogConfig{
 			Level:  getEnv("LOG_LEVEL", "info"),
 			Format: getEnv("LOG_FORMAT", "text"),
+			Output: getEnv("LOG_OUTPUT", "stdout"),     // stdout, file, both
+			File:   getEnv("LOG_FILE", "logs/app.log"), // 文件路径
 		},
 	}
 
@@ -71,4 +75,3 @@ func getEnv(key, defaultValue string) string {
 	}
 	return defaultValue
 }
-

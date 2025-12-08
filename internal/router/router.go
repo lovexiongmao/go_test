@@ -1,18 +1,21 @@
 package router
 
 import (
+	"go_test/internal/config"
 	"go_test/internal/handler"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter(
+	cfg *config.Config,
 	loggerMiddleware gin.HandlerFunc,
 	auditMiddleware gin.HandlerFunc,
 	userHandler *handler.UserHandler,
 ) *gin.Engine {
-	// 注意：Gin模式应该在main.go中通过gin.SetMode()设置
-	// 但gin.SetMode是全局设置，在路由创建后设置也能生效
+	// 在创建路由之前设置Gin模式
+	gin.SetMode(cfg.Server.Mode)
+	
 	r := gin.Default()
 
 	// 全局中间件
