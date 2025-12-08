@@ -20,6 +20,10 @@ go.work
 # Environment variables
 #.env
 
+# Log files
+logs/
+*.log
+
 # IDE
 .idea/
 .vscode/
