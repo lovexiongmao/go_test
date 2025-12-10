@@ -3,6 +3,7 @@ package router
 import (
 	"go_test/internal/config"
 	"go_test/internal/handler"
+	"go_test/internal/util"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
@@ -34,9 +35,8 @@ func SetupRouter(params RouterParams) *gin.Engine {
 
 	// 健康检查
 	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status":  "ok",
-			"message": "服务运行正常",
+		util.SuccessWithMessage(c, "服务运行正常", gin.H{
+			"status": "ok",
 		})
 	})
 

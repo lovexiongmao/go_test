@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"net/http"
 	"strconv"
 
 	"go_test/internal/service"
+	"go_test/internal/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,20 +32,17 @@ type UpdateUserRequest struct {
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		util.BadRequestWithError(c, "请求参数错误", err)
 		return
 	}
 
 	user, err := h.userService.CreateUser(req.Name, req.Email, req.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		util.InternalServerErrorWithError(c, "创建用户失败", err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "用户创建成功",
-		"data":    user,
-	})
+	util.CreatedWithMessage(c, "用户创建成功", user)
 }
 
 // GetUser 获取用户详情
@@ -53,19 +50,17 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
+		util.BadRequest(c, "无效的用户ID")
 		return
 	}
 
 	user, err := h.userService.GetUserByID(uint(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "用户不存在"})
+		util.NotFound(c, "用户不存在")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": user,
-	})
+	util.Success(c, user)
 }
 
 // UpdateUser 更新用户
@@ -73,13 +68,13 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
+		util.BadRequest(c, "无效的用户ID")
 		return
 	}
 
 	var req UpdateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		util.BadRequestWithError(c, "请求参数错误", err)
 		return
 	}
 
@@ -95,14 +90,11 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 
 	user, err := h.userService.UpdateUser(uint(id), name, status)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		util.InternalServerErrorWithError(c, "更新用户失败", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "用户更新成功",
-		"data":    user,
-	})
+	util.SuccessWithMessage(c, "用户更新成功", user)
 }
 
 // DeleteUser 删除用户
@@ -110,19 +102,17 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
+		util.BadRequest(c, "无效的用户ID")
 		return
 	}
 
 	err = h.userService.DeleteUser(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		util.InternalServerErrorWithError(c, "删除用户失败", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "用户删除成功",
-	})
+	util.SuccessWithMessage(c, "用户删除成功", nil)
 }
 
 // ListUsers 用户列表
@@ -139,16 +129,14 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 
 	users, total, err := h.userService.ListUsers(page, pageSize)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		util.InternalServerErrorWithError(c, "获取用户列表失败", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": gin.H{
-			"list":      users,
-			"total":     total,
-			"page":      page,
-			"page_size": pageSize,
-		},
+	util.Success(c, gin.H{
+		"list":      users,
+		"total":     total,
+		"page":      page,
+		"page_size": pageSize,
 	})
 }
