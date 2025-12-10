@@ -52,4 +52,3 @@ func LoggerMiddleware(log *logger.Logger) gin.HandlerFunc {
 		}
 	}
 }
-

@@ -152,4 +152,3 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 		},
 	})
 }
-

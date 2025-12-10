@@ -38,13 +38,12 @@ func NewDatabase(cfg *config.Config, log *logger.Logger) (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	// 注册自定义audit插件（可选，HTTP层面的审计已在中间件中实现）
-	// auditPlugin := NewAuditPlugin(db)
-	// if err := db.Use(auditPlugin); err != nil {
-	// 	return nil, err
-	// }
+	auditPlugin := NewAuditPlugin(db)
+	if err := db.Use(auditPlugin); err != nil {
+		return nil, err
+	}
 
 	log.Info("数据库连接成功")
 
 	return db, nil
 }
-

@@ -11,9 +11,9 @@ func AuditMiddleware(log *logger.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 记录请求信息到审计日志
 		auditInfo := map[string]interface{}{
-			"method":    c.Request.Method,
-			"path":      c.Request.URL.Path,
-			"client_ip": c.ClientIP(),
+			"method":     c.Request.Method,
+			"path":       c.Request.URL.Path,
+			"client_ip":  c.ClientIP(),
 			"user_agent": c.Request.UserAgent(),
 		}
 
@@ -27,4 +27,3 @@ func AuditMiddleware(log *logger.Logger) gin.HandlerFunc {
 		c.Next()
 	}
 }
-

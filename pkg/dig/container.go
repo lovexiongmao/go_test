@@ -69,10 +69,15 @@ func NewContainer() *Container {
 }
 
 // InitializeDatabase 初始化数据库表
-func InitializeDatabase(db *gorm.DB) error {
+// 注意：生产环境应禁用自动迁移，使用专门的迁移工具（如 golang-migrate）
+func InitializeDatabase(db *gorm.DB, cfg *config.Config) error {
+	// 只在配置允许时执行迁移
+	if !cfg.Database.AutoMigrate {
+		return nil
+	}
+
 	return db.AutoMigrate(
 		&model.User{},
-		// 如果需要数据库层面的审计日志表，可以取消注释
-		// &database.AuditLog{},
+		&database.AuditLog{},
 	)
 }

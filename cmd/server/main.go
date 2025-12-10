@@ -35,12 +35,16 @@ func startServer(
 ) error {
 	// Gin模式已在router.SetupRouter中设置
 
-	// 初始化数据库表
-	if err := dig.InitializeDatabase(db); err != nil {
-		return fmt.Errorf("初始化数据库失败: %v", err)
+	// 初始化数据库表（只在配置允许时执行）
+	// 生产环境应设置 DB_AUTO_MIGRATE=false，使用专门的迁移工具
+	if cfg.Database.AutoMigrate {
+		if err := dig.InitializeDatabase(db, cfg); err != nil {
+			return fmt.Errorf("初始化数据库失败: %v", err)
+		}
+		log.Info("数据库表初始化成功！")
+	} else {
+		log.Info("跳过数据库自动迁移（生产环境模式，请使用专门的迁移工具）")
 	}
-
-	log.Info("数据库表初始化成功！")
 
 	// 创建HTTP服务器
 	srv := &http.Server{

@@ -19,12 +19,13 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	DBName   string
-	DSN      string
+	Host        string
+	Port        string
+	User        string
+	Password    string
+	DBName      string
+	DSN         string
+	AutoMigrate bool // 是否自动迁移（开发环境可用，生产环境应设为false）
 }
 
 type LogConfig struct {
@@ -46,11 +47,12 @@ func LoadConfig() (*Config, error) {
 			Mode: getEnv("GIN_MODE", "debug"),
 		},
 		Database: DatabaseConfig{
-			Host:     getEnv("DB_HOST", "localhost"),
-			Port:     getEnv("DB_PORT", "3306"),
-			User:     getEnv("DB_USER", "root"),
-			Password: getEnv("DB_PASSWORD", ""),
-			DBName:   getEnv("DB_NAME", "testdb"),
+			Host:        getEnv("DB_HOST", "localhost"),
+			Port:        getEnv("DB_PORT", "3306"),
+			User:        getEnv("DB_USER", "root"),
+			Password:    getEnv("DB_PASSWORD", ""),
+			DBName:      getEnv("DB_NAME", "testdb"),
+			AutoMigrate: getEnv("DB_AUTO_MIGRATE", "true") == "true", // 默认开启，生产环境应设为false
 		},
 		Log: LogConfig{
 			Level:     getEnv("LOG_LEVEL", "info"),
