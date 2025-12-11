@@ -45,10 +45,12 @@ type UserResponse struct {
 // @Tags         用户管理
 // @Accept       json
 // @Produce      json
-// @Param        user  body      CreateUserRequest  true  "用户信息"
-// @Success      201   {object}  util.Response{data=UserResponse}
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        user          body      CreateUserRequest  true  "用户信息"
+// @Success      201           {object}  util.Response{data=UserResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req CreateUserRequest
@@ -72,10 +74,12 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Tags         用户管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "用户ID"
-// @Success      200  {object}  util.Response{data=UserResponse}
-// @Failure      400  {object}  util.Response
-// @Failure      404  {object}  util.Response
+// @Param        id            path      int     true  "用户ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=UserResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      404           {object}  util.Response
 // @Router       /users/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
@@ -100,11 +104,13 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Tags         用户管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int                true  "用户ID"
-// @Param        user  body      UpdateUserRequest  true  "用户信息"
-// @Success      200   {object}  util.Response{data=UserResponse}
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int                true  "用户ID"
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        user          body      UpdateUserRequest  true  "用户信息"
+// @Success      200           {object}  util.Response{data=UserResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	idStr := c.Param("id")
@@ -145,10 +151,12 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Tags         用户管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "用户ID"
-// @Success      200  {object}  util.Response
-// @Failure      400  {object}  util.Response
-// @Failure      500  {object}  util.Response
+// @Param        id            path      int     true  "用户ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	idStr := c.Param("id")
@@ -173,10 +181,12 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Tags         用户管理
 // @Accept       json
 // @Produce      json
-// @Param        page      query     int  false  "页码"      default(1)
-// @Param        page_size query     int  false  "每页数量"   default(10)
-// @Success      200       {object}  util.Response{data=object{list=[]UserResponse,total=int,page=int,page_size=int}}
-// @Failure      500       {object}  util.Response
+// @Param        page          query     int     false  "页码"      default(1)
+// @Param        page_size     query     int     false  "每页数量"   default(10)
+// @Param        Authorization header    string  false  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=object{list=[]UserResponse,total=int,page=int,page_size=int}}
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))

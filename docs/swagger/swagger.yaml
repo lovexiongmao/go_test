@@ -309,6 +309,11 @@ paths:
         in: query
         name: page_size
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        type: string
       produces:
       - application/json
       responses:
@@ -327,6 +332,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
       summary: 获取权限列表
       tags:
       - 权限管理
@@ -335,6 +344,12 @@ paths:
       - application/json
       description: 创建一个新权限
       parameters:
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 权限信息
         in: body
         name: permission
@@ -357,6 +372,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -375,6 +394,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -384,6 +409,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -403,6 +432,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -417,6 +452,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "404":
@@ -436,6 +475,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 权限信息
         in: body
         name: permission
@@ -456,6 +501,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -481,6 +530,11 @@ paths:
         in: query
         name: page_size
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        type: string
       produces:
       - application/json
       responses:
@@ -499,6 +553,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
       summary: 获取角色列表
       tags:
       - 角色管理
@@ -507,6 +565,12 @@ paths:
       - application/json
       description: 创建一个新角色
       parameters:
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 角色信息
         in: body
         name: role
@@ -529,6 +593,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -547,6 +615,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -556,6 +630,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -575,6 +653,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -589,6 +673,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "404":
@@ -608,6 +696,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 角色信息
         in: body
         name: role
@@ -630,6 +724,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -648,6 +746,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 权限ID列表
         in: body
         name: body
@@ -663,6 +767,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -682,6 +790,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -700,6 +814,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
       summary: 获取角色的权限列表
       tags:
       - 角色管理
@@ -713,6 +831,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 权限ID列表
         in: body
         name: body
@@ -728,6 +852,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -748,6 +876,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 用户ID列表
         in: body
         name: body
@@ -763,6 +897,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -782,6 +920,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -800,6 +944,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
       summary: 获取角色的用户列表
       tags:
       - 角色管理
@@ -813,6 +961,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 用户ID列表
         in: body
         name: body
@@ -828,6 +982,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -853,6 +1011,11 @@ paths:
         in: query
         name: page_size
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        type: string
       produces:
       - application/json
       responses:
@@ -876,6 +1039,10 @@ paths:
                       type: integer
                   type: object
               type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -888,6 +1055,12 @@ paths:
       - application/json
       description: 创建一个新用户
       parameters:
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 用户信息
         in: body
         name: user
@@ -910,6 +1083,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -928,6 +1105,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -937,6 +1120,10 @@ paths:
             $ref: '#/definitions/util.Response'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":
@@ -956,6 +1143,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -970,6 +1163,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "404":
@@ -989,6 +1186,12 @@ paths:
         name: id
         required: true
         type: integer
+      - default: Bearer
+        description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 用户信息
         in: body
         name: user
@@ -1009,6 +1212,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/util.Response'
         "500":

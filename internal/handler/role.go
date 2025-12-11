@@ -55,10 +55,12 @@ type RoleResponse struct {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        role  body      CreateRoleRequest  true  "角色信息"
-// @Success      201   {object}  util.Response{data=RoleResponse}
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        role          body      CreateRoleRequest  true  "角色信息"
+// @Success      201           {object}  util.Response{data=RoleResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles [post]
 func (h *RoleHandler) CreateRole(c *gin.Context) {
 	var req CreateRoleRequest
@@ -82,10 +84,12 @@ func (h *RoleHandler) CreateRole(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "角色ID"
-// @Success      200  {object}  util.Response{data=RoleResponse}
-// @Failure      400  {object}  util.Response
-// @Failure      404  {object}  util.Response
+// @Param        id            path      int     true  "角色ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=RoleResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      404           {object}  util.Response
 // @Router       /roles/{id} [get]
 func (h *RoleHandler) GetRole(c *gin.Context) {
 	idStr := c.Param("id")
@@ -110,11 +114,13 @@ func (h *RoleHandler) GetRole(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int               true  "角色ID"
-// @Param        role  body      UpdateRoleRequest true  "角色信息"
-// @Success      200   {object}  util.Response{data=RoleResponse}
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int               true  "角色ID"
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        role          body      UpdateRoleRequest  true  "角色信息"
+// @Success      200           {object}  util.Response{data=RoleResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id} [put]
 func (h *RoleHandler) UpdateRole(c *gin.Context) {
 	idStr := c.Param("id")
@@ -160,10 +166,12 @@ func (h *RoleHandler) UpdateRole(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "角色ID"
-// @Success      200  {object}  util.Response
-// @Failure      400  {object}  util.Response
-// @Failure      500  {object}  util.Response
+// @Param        id            path      int     true  "角色ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id} [delete]
 func (h *RoleHandler) DeleteRole(c *gin.Context) {
 	idStr := c.Param("id")
@@ -188,10 +196,12 @@ func (h *RoleHandler) DeleteRole(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        page      query     int  false  "页码"  default(1)
-// @Param        page_size query     int  false  "每页数量"  default(10)
-// @Success      200       {object}  util.Response{data=[]RoleResponse}
-// @Failure      400       {object}  util.Response
+// @Param        page          query     int     false  "页码"      default(1)
+// @Param        page_size     query     int     false  "每页数量"   default(10)
+// @Param        Authorization header    string  false  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=[]RoleResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
 // @Router       /roles [get]
 func (h *RoleHandler) ListRoles(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -212,11 +222,13 @@ func (h *RoleHandler) ListRoles(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int                      true  "角色ID"
-// @Param        body  body      AssignPermissionsRequest true  "权限ID列表"
-// @Success      200   {object}  util.Response
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int                      true  "角色ID"
+// @Param        Authorization header    string                   true  "Bearer {token}"  default(Bearer )
+// @Param        body          body      AssignPermissionsRequest true  "权限ID列表"
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id}/permissions [post]
 func (h *RoleHandler) AssignPermissions(c *gin.Context) {
 	idStr := c.Param("id")
@@ -247,11 +259,13 @@ func (h *RoleHandler) AssignPermissions(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int                      true  "角色ID"
-// @Param        body  body      AssignPermissionsRequest true  "权限ID列表"
-// @Success      200   {object}  util.Response
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int                      true  "角色ID"
+// @Param        Authorization header    string                   true  "Bearer {token}"  default(Bearer )
+// @Param        body          body      AssignPermissionsRequest true  "权限ID列表"
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id}/permissions [delete]
 func (h *RoleHandler) RemovePermissions(c *gin.Context) {
 	idStr := c.Param("id")
@@ -282,9 +296,11 @@ func (h *RoleHandler) RemovePermissions(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "角色ID"
-// @Success      200  {object}  util.Response{data=[]PermissionResponse}
-// @Failure      400  {object}  util.Response
+// @Param        id            path      int     true  "角色ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=[]PermissionResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
 // @Router       /roles/{id}/permissions [get]
 func (h *RoleHandler) GetRolePermissions(c *gin.Context) {
 	idStr := c.Param("id")
@@ -309,11 +325,13 @@ func (h *RoleHandler) GetRolePermissions(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int                true  "角色ID"
-// @Param        body  body      AssignUsersRequest true  "用户ID列表"
-// @Success      200   {object}  util.Response
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int                true  "角色ID"
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        body          body      AssignUsersRequest true  "用户ID列表"
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id}/users [post]
 func (h *RoleHandler) AssignUsers(c *gin.Context) {
 	idStr := c.Param("id")
@@ -344,11 +362,13 @@ func (h *RoleHandler) AssignUsers(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id    path      int                true  "角色ID"
-// @Param        body  body      AssignUsersRequest true  "用户ID列表"
-// @Success      200   {object}  util.Response
-// @Failure      400   {object}  util.Response
-// @Failure      500   {object}  util.Response
+// @Param        id            path      int                true  "角色ID"
+// @Param        Authorization header    string             true  "Bearer {token}"  default(Bearer )
+// @Param        body          body      AssignUsersRequest true  "用户ID列表"
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /roles/{id}/users [delete]
 func (h *RoleHandler) RemoveUsers(c *gin.Context) {
 	idStr := c.Param("id")
@@ -379,9 +399,11 @@ func (h *RoleHandler) RemoveUsers(c *gin.Context) {
 // @Tags         角色管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "角色ID"
-// @Success      200  {object}  util.Response{data=[]UserResponse}
-// @Failure      400  {object}  util.Response
+// @Param        id            path      int     true  "角色ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=[]UserResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
 // @Router       /roles/{id}/users [get]
 func (h *RoleHandler) GetRoleUsers(c *gin.Context) {
 	idStr := c.Param("id")

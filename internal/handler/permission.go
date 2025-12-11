@@ -51,10 +51,12 @@ type PermissionResponse struct {
 // @Tags         权限管理
 // @Accept       json
 // @Produce      json
-// @Param        permission  body      CreatePermissionRequest  true  "权限信息"
-// @Success      201          {object}  util.Response{data=PermissionResponse}
-// @Failure      400          {object}  util.Response
-// @Failure      500          {object}  util.Response
+// @Param        Authorization header    string                  true  "Bearer {token}"  default(Bearer )
+// @Param        permission     body      CreatePermissionRequest true  "权限信息"
+// @Success      201            {object}  util.Response{data=PermissionResponse}
+// @Failure      400            {object}  util.Response
+// @Failure      401            {object}  util.Response
+// @Failure      500            {object}  util.Response
 // @Router       /permissions [post]
 func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 	var req CreatePermissionRequest
@@ -78,10 +80,12 @@ func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 // @Tags         权限管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "权限ID"
-// @Success      200  {object}  util.Response{data=PermissionResponse}
-// @Failure      400  {object}  util.Response
-// @Failure      404  {object}  util.Response
+// @Param        id            path      int     true  "权限ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=PermissionResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      404           {object}  util.Response
 // @Router       /permissions/{id} [get]
 func (h *PermissionHandler) GetPermission(c *gin.Context) {
 	idStr := c.Param("id")
@@ -106,11 +110,13 @@ func (h *PermissionHandler) GetPermission(c *gin.Context) {
 // @Tags         权限管理
 // @Accept       json
 // @Produce      json
-// @Param        id          path      int                    true  "权限ID"
-// @Param        permission  body      UpdatePermissionRequest true  "权限信息"
-// @Success      200         {object}  util.Response{data=PermissionResponse}
-// @Failure      400         {object}  util.Response
-// @Failure      500         {object}  util.Response
+// @Param        id            path      int                    true  "权限ID"
+// @Param        Authorization header    string                 true  "Bearer {token}"  default(Bearer )
+// @Param        permission    body      UpdatePermissionRequest true  "权限信息"
+// @Success      200           {object}  util.Response{data=PermissionResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /permissions/{id} [put]
 func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 	idStr := c.Param("id")
@@ -156,10 +162,12 @@ func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 // @Tags         权限管理
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "权限ID"
-// @Success      200  {object}  util.Response
-// @Failure      400  {object}  util.Response
-// @Failure      500  {object}  util.Response
+// @Param        id            path      int     true  "权限ID"
+// @Param        Authorization header    string  true  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
+// @Failure      500           {object}  util.Response
 // @Router       /permissions/{id} [delete]
 func (h *PermissionHandler) DeletePermission(c *gin.Context) {
 	idStr := c.Param("id")
@@ -184,10 +192,12 @@ func (h *PermissionHandler) DeletePermission(c *gin.Context) {
 // @Tags         权限管理
 // @Accept       json
 // @Produce      json
-// @Param        page      query     int  false  "页码"  default(1)
-// @Param        page_size query     int  false  "每页数量"  default(10)
-// @Success      200       {object}  util.Response{data=[]PermissionResponse}
-// @Failure      400       {object}  util.Response
+// @Param        page          query     int     false  "页码"      default(1)
+// @Param        page_size     query     int     false  "每页数量"   default(10)
+// @Param        Authorization header    string  false  "Bearer {token}"  default(Bearer )
+// @Success      200           {object}  util.Response{data=[]PermissionResponse}
+// @Failure      400           {object}  util.Response
+// @Failure      401           {object}  util.Response
 // @Router       /permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
