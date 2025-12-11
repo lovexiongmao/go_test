@@ -35,5 +35,6 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Debug need file
-cmd/server/.env
+# AI Assistant  Generated Files
+docs/*.md
+
