@@ -6,5 +6,5 @@
 // 5. 完成swagger UI功能
 // 6. 增加 internal/util/reponse.go 文件，统一http的响应
 7. swagger文档，针对增删改需要token认证才能放行请求
-8. 给权限表和角色表里添加记录
-9. 修改项目名称为go_web
+// 8. 给权限表和角色表里添加记录
+// 9. 修改项目名称为go_web
