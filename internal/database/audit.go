@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -11,8 +12,9 @@ import (
 
 // Context keys for audit information
 const (
-	AuditUserIDKey = "audit:user_id"
-	AuditIPKey     = "audit:ip"
+	AuditUserIDKey    = "audit:user_id"
+	AuditIPKey        = "audit:ip"
+	AuditOldValuesKey = "audit:old_values" // 用于存储更新前的旧值
 )
 
 // AuditLog 审计日志模型
@@ -59,7 +61,8 @@ func (p *AuditPlugin) Initialize(db *gorm.DB) error {
 	// Create回调
 	callback.Create().After("gorm:create").Register("audit:create", p.auditCreate)
 
-	// Update回调
+	// Update回调：在更新前获取旧值，在更新后记录审计日志
+	callback.Update().Before("gorm:update").Register("audit:before_update", p.auditBeforeUpdate)
 	callback.Update().After("gorm:update").Register("audit:update", p.auditUpdate)
 
 	// Delete回调
@@ -113,6 +116,49 @@ func (p *AuditPlugin) auditCreate(db *gorm.DB) {
 	p.db.Session(&gorm.Session{NewDB: true}).Create(&auditLog)
 }
 
+// auditBeforeUpdate 在更新前获取旧值并存储到context中
+func (p *AuditPlugin) auditBeforeUpdate(db *gorm.DB) {
+	// 跳过审计日志表自身的操作
+	if db.Statement.Schema != nil && db.Statement.Schema.Table == "audit_logs" {
+		return
+	}
+
+	// 获取表名
+	tableName := p.getTableName(db)
+	if tableName == "" {
+		return
+	}
+
+	// 获取记录ID
+	recordID := p.getRecordID(db)
+	if recordID == 0 {
+		return
+	}
+
+	// 在更新前查询旧值
+	if db.Statement.Schema != nil {
+		oldModel := reflect.New(db.Statement.Schema.ModelType).Interface()
+		// 使用新的数据库连接查询，避免影响原事务
+		// 使用 NewDB: true 确保使用独立的连接，避免事务隔离问题
+		// 但保留原 context，以便后续回调可以访问
+		oldDB := db.Session(&gorm.Session{NewDB: true})
+		if err := oldDB.First(oldModel, recordID).Error; err == nil {
+			oldValues := p.serializeModel(oldModel)
+			// 将旧值存储到context中
+			if db.Statement.Context != nil {
+				ctx := db.Statement.Context
+				ctx = context.WithValue(ctx, AuditOldValuesKey, oldValues)
+				db.Statement.Context = ctx
+			} else {
+				// 如果 context 为空，创建一个新的 context
+				ctx := context.Background()
+				ctx = context.WithValue(ctx, AuditOldValuesKey, oldValues)
+				db.Statement.Context = ctx
+			}
+		}
+	}
+}
+
 // auditUpdate 记录更新操作的审计日志
 func (p *AuditPlugin) auditUpdate(db *gorm.DB) {
 	if db.Error != nil {
@@ -137,27 +183,24 @@ func (p *AuditPlugin) auditUpdate(db *gorm.DB) {
 	}
 
 	// 获取新旧值
+	// 旧值应该已经在 auditBeforeUpdate 中获取并存储到context中
 	oldValues := ""
-	newValues := p.serializeModel(db.Statement.Dest)
-
-	// 如果有 Select 字段，只记录变更的字段
-	if len(db.Statement.Selects) > 0 {
-		// 尝试获取旧值（需要查询数据库）
-		if db.Statement.Schema != nil {
-			oldModel := reflect.New(db.Statement.Schema.ModelType).Interface()
-			if err := db.Session(&gorm.Session{}).First(oldModel, recordID).Error; err == nil {
-				oldValues = p.serializeModel(oldModel)
-			}
-		}
-	} else {
-		// 全量更新，尝试从 Statement 获取旧值
-		if db.Statement.Schema != nil {
-			oldModel := reflect.New(db.Statement.Schema.ModelType).Interface()
-			if err := db.Session(&gorm.Session{}).First(oldModel, recordID).Error; err == nil {
-				oldValues = p.serializeModel(oldModel)
-			}
+	if db.Statement.Context != nil {
+		if oldVals, ok := db.Statement.Context.Value(AuditOldValuesKey).(string); ok {
+			oldValues = oldVals
 		}
 	}
+
+	// 如果context中没有旧值，尝试查询（兼容性处理）
+	if oldValues == "" && db.Statement.Schema != nil {
+		oldModel := reflect.New(db.Statement.Schema.ModelType).Interface()
+		// 使用 Unscoped 查询，因为可能已经被软删除
+		if err := p.db.Session(&gorm.Session{NewDB: true}).Unscoped().First(oldModel, recordID).Error; err == nil {
+			oldValues = p.serializeModel(oldModel)
+		}
+	}
+
+	newValues := p.serializeModel(db.Statement.Dest)
 
 	// 获取用户ID和IP
 	userID := p.getUserID(db)
