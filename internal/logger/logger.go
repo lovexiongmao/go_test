@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"go_test/internal/config"
+	"go_web/internal/config"
 
 	"github.com/sirupsen/logrus"
 )

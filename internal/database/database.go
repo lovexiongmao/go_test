@@ -3,8 +3,8 @@ package database
 import (
 	"time"
 
-	"go_test/internal/config"
-	"go_test/internal/logger"
+	"go_web/internal/config"
+	"go_web/internal/logger"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

@@ -1,15 +1,15 @@
 package dig
 
 import (
-	"go_test/internal/config"
-	"go_test/internal/database"
-	"go_test/internal/handler"
-	"go_test/internal/logger"
-	"go_test/internal/middleware"
-	"go_test/internal/model"
-	"go_test/internal/repository"
-	"go_test/internal/router"
-	"go_test/internal/service"
+	"go_web/internal/config"
+	"go_web/internal/database"
+	"go_web/internal/handler"
+	"go_web/internal/logger"
+	"go_web/internal/middleware"
+	"go_web/internal/model"
+	"go_web/internal/repository"
+	"go_web/internal/router"
+	"go_web/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"

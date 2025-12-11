@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 
-	"go_test/internal/model"
-	"go_test/internal/repository"
+	"go_web/internal/model"
+	"go_web/internal/repository"
 
 	"gorm.io/gorm"
 )
@@ -91,4 +91,3 @@ func (s *userService) ListUsers(page, pageSize int) ([]*model.User, int64, error
 	offset := (page - 1) * pageSize
 	return s.userRepo.List(offset, pageSize)
 }
-

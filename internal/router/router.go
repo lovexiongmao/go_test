@@ -1,10 +1,10 @@
 package router
 
 import (
-	"go_test/docs/swagger" // Swagger 文档
-	"go_test/internal/config"
-	"go_test/internal/handler"
-	"go_test/internal/util"
+	"go_web/docs/swagger" // Swagger 文档
+	"go_web/internal/config"
+	"go_web/internal/handler"
+	"go_web/internal/util"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

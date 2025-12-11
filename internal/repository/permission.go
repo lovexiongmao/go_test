@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"go_test/internal/model"
+	"go_web/internal/model"
 
 	"gorm.io/gorm"
 )

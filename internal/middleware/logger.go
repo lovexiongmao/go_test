@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"go_test/internal/logger"
+	"go_web/internal/logger"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

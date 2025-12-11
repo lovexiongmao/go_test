@@ -1,4 +1,4 @@
-// @title           Go Test API
+// @title           Go Web API
 // @version         1.0
 // @description     这是一个 Go Web项目的 RESTful API 文档
 // @termsOfService  http://swagger.io/terms/
@@ -26,10 +26,10 @@ import (
 	"syscall"
 	"time"
 
-	"go_test/docs/swagger" // Swagger 文档
-	"go_test/internal/config"
-	"go_test/internal/logger"
-	"go_test/pkg/dig"
+	"go_web/docs/swagger" // Swagger 文档
+	"go_web/internal/config"
+	"go_web/internal/logger"
+	"go_web/pkg/dig"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

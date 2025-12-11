@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 
-	"go_test/internal/model"
-	"go_test/internal/repository"
+	"go_web/internal/model"
+	"go_web/internal/repository"
 
 	"gorm.io/gorm"
 )

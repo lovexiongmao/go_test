@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"time"
 
-	"go_test/internal/service"
-	"go_test/internal/util"
+	"go_web/internal/service"
+	"go_web/internal/util"
 
 	"github.com/gin-gonic/gin"
 )

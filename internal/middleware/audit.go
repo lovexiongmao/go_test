@@ -3,8 +3,8 @@ package middleware
 import (
 	"context"
 
-	"go_test/internal/database"
-	"go_test/internal/logger"
+	"go_web/internal/database"
+	"go_web/internal/logger"
 
 	"github.com/gin-gonic/gin"
 )

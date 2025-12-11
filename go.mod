@@ -1,4 +1,4 @@
-module go_test
+module go_web
 
 go 1.24.0
 
