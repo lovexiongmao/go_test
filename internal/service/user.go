@@ -16,6 +16,8 @@ type UserService interface {
 	UpdateUser(id uint, name string, status int) (*model.User, error)
 	DeleteUser(id uint) error
 	ListUsers(page, pageSize int) ([]*model.User, int64, error)
+	// 权限检查
+	HasPermission(userID uint, resource, action string) (bool, error)
 }
 
 type userService struct {
@@ -90,4 +92,9 @@ func (s *userService) DeleteUser(id uint) error {
 func (s *userService) ListUsers(page, pageSize int) ([]*model.User, int64, error) {
 	offset := (page - 1) * pageSize
 	return s.userRepo.List(offset, pageSize)
+}
+
+// HasPermission 检查用户是否拥有指定资源与操作的权限
+func (s *userService) HasPermission(userID uint, resource, action string) (bool, error) {
+	return s.userRepo.HasPermission(userID, resource, action)
 }

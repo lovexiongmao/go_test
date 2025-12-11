@@ -19,6 +19,8 @@ type UserRepository interface {
 	AssignRoles(userID uint, roleIDs []uint) error
 	RemoveRoles(userID uint, roleIDs []uint) error
 	GetRoles(userID uint) ([]*model.Role, error)
+	// 权限检查
+	HasPermission(userID uint, resource, action string) (bool, error)
 }
 
 type userRepository struct {
@@ -118,4 +120,25 @@ func (r *userRepository) GetRoles(userID uint) ([]*model.Role, error) {
 	var roles []*model.Role
 	err := r.db.Model(&user).Association("Roles").Find(&roles)
 	return roles, err
+}
+
+// HasPermission 检查用户是否拥有指定资源与操作的权限
+func (r *userRepository) HasPermission(userID uint, resource, action string) (bool, error) {
+	var count int64
+	err := r.db.Model(&model.Permission{}).
+		Joins("JOIN role_permissions ON role_permissions.permission_id = permissions.id").
+		Joins("JOIN roles ON roles.id = role_permissions.role_id").
+		Joins("JOIN user_roles ON user_roles.role_id = roles.id").
+		Where("user_roles.user_id = ?", userID).
+		Where("permissions.resource = ?", resource).
+		Where("permissions.action = ?", action).
+		Where("permissions.status = ?", 1).
+		Where("roles.status = ?", 1).
+		Count(&count).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }

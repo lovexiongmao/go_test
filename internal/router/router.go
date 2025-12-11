@@ -4,6 +4,8 @@ import (
 	"go_web/docs/swagger" // Swagger 文档
 	"go_web/internal/config"
 	"go_web/internal/handler"
+	"go_web/internal/middleware"
+	"go_web/internal/service"
 	"go_web/internal/util"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +24,7 @@ type RouterParams struct {
 	UserHandler       *handler.UserHandler
 	RoleHandler       *handler.RoleHandler
 	PermissionHandler *handler.PermissionHandler
+	UserService       service.UserService
 }
 
 func SetupRouter(params RouterParams) *gin.Engine {
@@ -31,6 +34,7 @@ func SetupRouter(params RouterParams) *gin.Engine {
 	userHandler := params.UserHandler
 	roleHandler := params.RoleHandler
 	permissionHandler := params.PermissionHandler
+	userService := params.UserService
 	// 在创建路由之前设置Gin模式
 	gin.SetMode(cfg.Server.Mode)
 
@@ -58,39 +62,39 @@ func SetupRouter(params RouterParams) *gin.Engine {
 		// 用户相关路由
 		users := api.Group("/users")
 		{
-			users.POST("", userHandler.CreateUser)
-			users.GET("", userHandler.ListUsers)
-			users.GET("/:id", userHandler.GetUser)
-			users.PUT("/:id", userHandler.UpdateUser)
-			users.DELETE("/:id", userHandler.DeleteUser)
+			users.POST("", middleware.RequirePermission(userService, "user", "create"), userHandler.CreateUser)
+			users.GET("", middleware.RequirePermission(userService, "user", "read"), userHandler.ListUsers)
+			users.GET("/:id", middleware.RequirePermission(userService, "user", "read"), userHandler.GetUser)
+			users.PUT("/:id", middleware.RequirePermission(userService, "user", "update"), userHandler.UpdateUser)
+			users.DELETE("/:id", middleware.RequirePermission(userService, "user", "delete"), userHandler.DeleteUser)
 		}
 
 		// 角色相关路由
 		roles := api.Group("/roles")
 		{
-			roles.POST("", roleHandler.CreateRole)
-			roles.GET("", roleHandler.ListRoles)
-			roles.GET("/:id", roleHandler.GetRole)
-			roles.PUT("/:id", roleHandler.UpdateRole)
-			roles.DELETE("/:id", roleHandler.DeleteRole)
+			roles.POST("", middleware.RequirePermission(userService, "role", "create"), roleHandler.CreateRole)
+			roles.GET("", middleware.RequirePermission(userService, "role", "read"), roleHandler.ListRoles)
+			roles.GET("/:id", middleware.RequirePermission(userService, "role", "read"), roleHandler.GetRole)
+			roles.PUT("/:id", middleware.RequirePermission(userService, "role", "update"), roleHandler.UpdateRole)
+			roles.DELETE("/:id", middleware.RequirePermission(userService, "role", "delete"), roleHandler.DeleteRole)
 			// 角色权限管理
-			roles.POST("/:id/permissions", roleHandler.AssignPermissions)
-			roles.DELETE("/:id/permissions", roleHandler.RemovePermissions)
-			roles.GET("/:id/permissions", roleHandler.GetRolePermissions)
+			roles.POST("/:id/permissions", middleware.RequirePermission(userService, "role", "update"), roleHandler.AssignPermissions)
+			roles.DELETE("/:id/permissions", middleware.RequirePermission(userService, "role", "update"), roleHandler.RemovePermissions)
+			roles.GET("/:id/permissions", middleware.RequirePermission(userService, "role", "read"), roleHandler.GetRolePermissions)
 			// 角色用户管理
-			roles.POST("/:id/users", roleHandler.AssignUsers)
-			roles.DELETE("/:id/users", roleHandler.RemoveUsers)
-			roles.GET("/:id/users", roleHandler.GetRoleUsers)
+			roles.POST("/:id/users", middleware.RequirePermission(userService, "role", "update"), roleHandler.AssignUsers)
+			roles.DELETE("/:id/users", middleware.RequirePermission(userService, "role", "update"), roleHandler.RemoveUsers)
+			roles.GET("/:id/users", middleware.RequirePermission(userService, "role", "read"), roleHandler.GetRoleUsers)
 		}
 
 		// 权限相关路由
 		permissions := api.Group("/permissions")
 		{
-			permissions.POST("", permissionHandler.CreatePermission)
-			permissions.GET("", permissionHandler.ListPermissions)
-			permissions.GET("/:id", permissionHandler.GetPermission)
-			permissions.PUT("/:id", permissionHandler.UpdatePermission)
-			permissions.DELETE("/:id", permissionHandler.DeletePermission)
+			permissions.POST("", middleware.RequirePermission(userService, "permission", "create"), permissionHandler.CreatePermission)
+			permissions.GET("", middleware.RequirePermission(userService, "permission", "read"), permissionHandler.ListPermissions)
+			permissions.GET("/:id", middleware.RequirePermission(userService, "permission", "read"), permissionHandler.GetPermission)
+			permissions.PUT("/:id", middleware.RequirePermission(userService, "permission", "update"), permissionHandler.UpdatePermission)
+			permissions.DELETE("/:id", middleware.RequirePermission(userService, "permission", "delete"), permissionHandler.DeletePermission)
 		}
 	}
 
