@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -10,6 +11,7 @@ type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
 	Log      LogConfig
+	JWT      JWTConfig
 }
 
 type ServerConfig struct {
@@ -34,6 +36,11 @@ type LogConfig struct {
 	Output    string // stdout, file, both
 	LogFile   string // 请求日志文件路径
 	AuditFile string // 审计日志文件路径
+}
+
+type JWTConfig struct {
+	Secret     string // JWT 密钥
+	ExpireTime int    // Token 过期时间（分钟）
 }
 
 func LoadConfig() (*Config, error) {
@@ -61,6 +68,10 @@ func LoadConfig() (*Config, error) {
 			LogFile:   getEnv("APP_LOG_FILE", "logs/app.log"),     // 请求日志文件路径
 			AuditFile: getEnv("AUDIT_LOG_FILE", "logs/audit.log"), // 审计日志文件路径
 		},
+		JWT: JWTConfig{
+			Secret:     getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
+			ExpireTime: getEnvInt("JWT_EXPIRE_TIME", 1440), // 默认1440分钟（24小时）
+		},
 	}
 
 	// 构建DSN
@@ -76,6 +87,15 @@ func buildDSN(db DatabaseConfig) string {
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
+	}
+	return defaultValue
+}
+
+func getEnvInt(key string, defaultValue int) int {
+	if value := os.Getenv(key); value != "" {
+		if intValue, err := strconv.Atoi(value); err == nil {
+			return intValue
+		}
 	}
 	return defaultValue
 }

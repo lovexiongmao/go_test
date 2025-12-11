@@ -70,6 +70,28 @@ definitions:
     - name
     - password
     type: object
+  handler.LoginRequest:
+    properties:
+      email:
+        description: 用户邮箱
+        example: admin@example.com
+        type: string
+      password:
+        description: 用户密码
+        example: "123456"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.LoginResponse:
+    properties:
+      token:
+        description: JWT Token
+        type: string
+      user:
+        description: 用户信息
+    type: object
   handler.PermissionResponse:
     properties:
       action:
@@ -228,14 +250,49 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: 这是一个 Go 测试项目的 RESTful API 文档
+  description: 这是一个 Go Web项目的 RESTful API 文档
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Go Test API
+  title: Go Web API
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录接口，验证用户名密码后返回 JWT Token
+      parameters:
+      - description: 登录信息
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/handler.LoginResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 用户登录
+      tags:
+      - 认证
   /permissions:
     get:
       consumes:

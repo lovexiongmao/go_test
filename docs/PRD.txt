@@ -5,7 +5,8 @@
 // 4. 增删改都要进行鉴权，确定是有权限以后才能放行操作
 // 5. 完成swagger UI功能
 // 6. 增加 internal/util/reponse.go 文件，统一http的响应
-7. swagger文档，针对增删改需要token认证才能放行请求
+// 7. swagger文档，针对增删改需要token认证才能放行请求
 // 8. 给权限表和角色表里添加记录
 // 9. 修改项目名称为go_web
 // 10. 后续的接口请求，需要校验对应的资源是否有权限， 
+11. swagger 调用接口的时候，需要在header 里面设置token

@@ -53,6 +53,7 @@ func NewContainer() *Container {
 	c.Provide(handler.NewUserHandler)
 	c.Provide(handler.NewRoleHandler)
 	c.Provide(handler.NewPermissionHandler)
+	c.Provide(handler.NewAuthHandler)
 
 	// 提供中间件（使用命名参数区分）
 	c.Provide(func(log *logger.Logger) gin.HandlerFunc {
@@ -67,6 +68,11 @@ func NewContainer() *Container {
 	c.Provide(func(params AuditMiddlewareParams) gin.HandlerFunc {
 		return middleware.AuditMiddleware(params.AuditLogger)
 	}, dig.Name("audit"))
+
+	// JWT 认证中间件
+	c.Provide(func(cfg *config.Config) gin.HandlerFunc {
+		return middleware.JWTAuthMiddleware(cfg)
+	}, dig.Name("jwt"))
 
 	// 提供路由
 	c.Provide(router.SetupRouter)

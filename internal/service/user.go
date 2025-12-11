@@ -6,6 +6,7 @@ import (
 	"go_web/internal/model"
 	"go_web/internal/repository"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -39,10 +40,16 @@ func (s *userService) CreateUser(name, email, password string) (*model.User, err
 		return nil, err
 	}
 
+	// 使用 bcrypt 对密码进行哈希
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New("密码加密失败")
+	}
+
 	user := &model.User{
 		Name:     name,
 		Email:    email,
-		Password: password, // 实际应用中应该加密
+		Password: string(hashedPassword),
 		Status:   1,
 	}
 
