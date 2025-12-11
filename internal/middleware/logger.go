@@ -24,7 +24,29 @@ func LoggerMiddleware(log *logger.Logger) gin.HandlerFunc {
 		clientIP := c.ClientIP()
 		method := c.Request.Method
 		statusCode := c.Writer.Status()
-		errorMessage := c.Errors.ByType(gin.ErrorTypePrivate).String()
+
+		// 收集所有类型的错误信息
+		var errorMessages []string
+		if errs := c.Errors.ByType(gin.ErrorTypePrivate); len(errs) > 0 {
+			for _, err := range errs {
+				errorMessages = append(errorMessages, err.Error())
+			}
+		}
+		if errs := c.Errors.ByType(gin.ErrorTypePublic); len(errs) > 0 {
+			for _, err := range errs {
+				errorMessages = append(errorMessages, err.Error())
+			}
+		}
+		if errs := c.Errors.ByType(gin.ErrorTypeBind); len(errs) > 0 {
+			for _, err := range errs {
+				errorMessages = append(errorMessages, err.Error())
+			}
+		}
+		if errs := c.Errors.ByType(gin.ErrorTypeAny); len(errs) > 0 {
+			for _, err := range errs {
+				errorMessages = append(errorMessages, err.Error())
+			}
+		}
 
 		if raw != "" {
 			path = path + "?" + raw
@@ -39,8 +61,16 @@ func LoggerMiddleware(log *logger.Logger) gin.HandlerFunc {
 			"user_agent": c.Request.UserAgent(),
 		})
 
-		if errorMessage != "" {
-			entry = entry.WithField("error", errorMessage)
+		// 如果有错误信息，记录到日志中
+		if len(errorMessages) > 0 {
+			errorMsg := ""
+			for i, msg := range errorMessages {
+				if i > 0 {
+					errorMsg += "; "
+				}
+				errorMsg += msg
+			}
+			entry = entry.WithField("error", errorMsg)
 		}
 
 		if statusCode >= 500 {

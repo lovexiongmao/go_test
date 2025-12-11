@@ -1,11 +1,14 @@
 package router
 
 import (
+	"go_test/docs/swagger" // Swagger 文档
 	"go_test/internal/config"
 	"go_test/internal/handler"
 	"go_test/internal/util"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/dig"
 )
 
@@ -39,6 +42,11 @@ func SetupRouter(params RouterParams) *gin.Engine {
 			"status": "ok",
 		})
 	})
+
+	// Swagger UI 文档
+	// 确保 Swagger 文档被注册（导入 docs/swagger 包会自动执行 init 函数）
+	_ = swagger.SwaggerInfo
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// API路由组
 	api := r.Group("/api/v1")

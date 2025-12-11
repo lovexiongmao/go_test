@@ -1,0 +1,273 @@
+basePath: /api/v1
+definitions:
+  handler.CreateUserRequest:
+    properties:
+      email:
+        description: 用户邮箱
+        example: zhangsan@example.com
+        type: string
+      name:
+        description: 用户姓名
+        example: 张三
+        type: string
+      password:
+        description: 用户密码（最少6位）
+        example: "123456"
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  handler.UpdateUserRequest:
+    properties:
+      name:
+        description: 用户姓名（可选）
+        example: 李四
+        type: string
+      status:
+        description: 用户状态：1-正常，0-禁用（可选）
+        example: 1
+        type: integer
+    type: object
+  handler.UserResponse:
+    properties:
+      created_at:
+        description: 创建时间
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      email:
+        description: 用户邮箱
+        example: zhangsan@example.com
+        type: string
+      id:
+        description: 用户ID
+        example: 1
+        type: integer
+      name:
+        description: 用户姓名
+        example: 张三
+        type: string
+      status:
+        description: 用户状态：1-正常，0-禁用
+        example: 1
+        type: integer
+      updated_at:
+        description: 更新时间
+        example: "2024-01-01T00:00:00Z"
+        type: string
+    type: object
+  util.Response:
+    properties:
+      code:
+        description: HTTP 状态码
+        type: integer
+      data:
+        description: 响应数据（可选）
+      error:
+        description: 错误详情（可选）
+        type: string
+      message:
+        description: 响应消息
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: 这是一个 Go 测试项目的 RESTful API 文档
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Test API
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: 分页获取用户列表
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  properties:
+                    list:
+                      items:
+                        $ref: '#/definitions/handler.UserResponse'
+                      type: array
+                    page:
+                      type: integer
+                    page_size:
+                      type: integer
+                    total:
+                      type: integer
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 获取用户列表
+      tags:
+      - 用户管理
+    post:
+      consumes:
+      - application/json
+      description: 创建一个新用户
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/handler.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 创建用户
+      tags:
+      - 用户管理
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据用户ID删除用户（软删除）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 删除用户
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      description: 根据用户ID获取用户详细信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/handler.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 获取用户详情
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      description: 根据用户ID更新用户信息（支持部分更新）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/handler.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: 更新用户
+      tags:
+      - 用户管理
+schemes:
+- http
+- https
+swagger: "2.0"

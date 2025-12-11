@@ -1,3 +1,20 @@
+// @title           Go Test API
+// @version         1.0
+// @description     这是一个 Go 测试项目的 RESTful API 文档
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @schemes   http https
+
 package main
 
 import (
@@ -9,6 +26,7 @@ import (
 	"syscall"
 	"time"
 
+	"go_test/docs/swagger" // Swagger 文档
 	"go_test/internal/config"
 	"go_test/internal/logger"
 	"go_test/pkg/dig"
@@ -18,6 +36,9 @@ import (
 )
 
 func main() {
+	// 初始化 Swagger 文档（导入 docs/swagger 包会自动执行 init 函数）
+	_ = swagger.SwaggerInfo
+
 	// 创建依赖注入容器
 	container := dig.NewContainer()
 
